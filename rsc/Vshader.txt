@@ -1,0 +1,21 @@
+#version 330 core
+
+layout(location = 0) in vec3 pos;
+layout(location = 1) in vec3 COLOR;
+layout(location = 2) in vec3 Normals;
+
+out vec3 DiCOLOR;
+out vec3 Nnormals;
+out vec3 FragPos;
+out vec3 amb;
+uniform float offset;
+uniform mat4 Model;
+uniform mat4 View;
+uniform mat4 Projection;
+
+void main()
+{
+   gl_Position = Projection * View * Model * vec4(pos, 1.0);
+   Nnormals = normalize(mat3(Model) * Normals); 
+   FragPos = mat3(Model) * pos; 
+}

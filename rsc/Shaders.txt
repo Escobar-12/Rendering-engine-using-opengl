@@ -1,0 +1,24 @@
+#pragma once
+// Vertex Shader
+#version 430
+layout(location = 0) in vec3 pos;
+layout(location = 1) in vec3 COLOR;
+out vec3 DiCOLOR;
+uniform float offset;
+uniform mat4 Model;
+uniform mat4 View;
+uniform mat4 Projection;
+void main()
+{
+   gl_Position = Projection * View * Model * vec4(pos, 1.0);
+   DiCOLOR = COLOR;
+};
+
+// Fragment Shader
+#version 430
+in vec3 DiCOLOR;
+out vec4 MiCOLOR;
+void main()
+{
+   MiCOLOR = vec4(DiCOLOR, 1.0);
+};

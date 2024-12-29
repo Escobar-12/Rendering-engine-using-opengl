@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{388fcab0-2116-41b9-9c40-5a26eccdc2b1}</ProjectGuid>
+    <RootNamespace>OpenGL</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>GLEW_STATIC;_DEBUG;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Depandencies\glm-master\glm;$(SolutionDir)Depandencies\GLFW\include;$(SolutionDir)Depandencies\GLEW\include;%(AdditionalIncludeDirectories);$(SolutionDir)Depandencies\imgui;$(SolutionDir)Depandencies\Assmip\include;$(SolutionDir)Depandencies\Assmip\include\assimp-vc142-mtd;$(SolutionDir)Depandencies\Assimp\include;$(SolutionDir)Depandencies\assimpC\include;$(SolutionDir)Depandencies\assimpC\include;$(SolutionDir)Depandencies\a\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Depandencies\a\lib;$(SolutionDir)Depandencies\GLFW\lib-vc2022;$(SolutionDir)Depandencies\GLEW\lib\Release\Win32;%(AdditionalLibraryDirectories);$(SolutionDir)Depandencies\Assimp\lib;$(SolutionDir)Depandencies\assimpC\lib;$(SolutionDir)Depandencies\assimpC\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;assimp-vc142-mt.lib;glfw3.lib;glew32s.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>GLEW_STATIC;_DEBUG;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Depandencies\glm-master\glm;$(SolutionDir)Depandencies\GLFW\include;$(SolutionDir)Depandencies\GLEW\include;%(AdditionalIncludeDirectories);$(SolutionDir)Depandencies\imgui;$(SolutionDir)Depandencies\Assmip\include;$(SolutionDir)Depandencies\Assmip\include\assimp-vc142-mtd;$(SolutionDir)Depandencies\Assimp\include;$(SolutionDir)Depandencies\assimpC\include;$(SolutionDir)Depandencies\assimpC\include;$(SolutionDir)Depandencies\a\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Depandencies\a\lib;$(SolutionDir)Depandencies\GLFW\lib-vc2022;$(SolutionDir)Depandencies\GLEW\lib\Release\Win32;%(AdditionalLibraryDirectories);$(SolutionDir)Depandencies\Assimp\lib;$(SolutionDir)Depandencies\assimpC\lib;$(SolutionDir)Depandencies\assimpC\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;assimp-vc142-mt.lib;glfw3.lib;glew32s.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Depandencies\glm-master\glm;$(SolutionDir)/../ExternalLib/Glew and Glut/freeglut/include;$(SolutionDir)/../ExternalLib/Glew and Glut/glew-1.11.0/include;%(AdditionalIncludeDirectories);$(SolutionDir)Depandencies\imgui;$(SolutionDir)Depandencies\Assmip\include;$(SolutionDir)Depandencies\Assmip\include\assimp-vc142-mtd;$(SolutionDir)Depandencies\Assimp\include;$(SolutionDir)Depandencies\assimpC\include;$(SolutionDir)Depandencies\assimpC\include;$(SolutionDir)Depandencies\a\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Depandencies\a\lib;$(SolutionDir)/../ExternalLib/Glew and Glut/glew-1.11.0/lib;$(SolutionDir)/../ExternalLib/Glew and Glut/freeglut/lib;%(AdditionalLibraryDirectories);/NODEFAULTLIB:libcmt.lib;/NODEFAULTLIB:libcmtd.lib;/NODEFAULTLIB:msvcrtd.lib;$(SolutioDir)Depandencies\Assmip\lib;$(SolutionDir)Depandencies\Assmip\lib\;$(SolutionDir)Depandencies\Assimp\lib;$(SolutionDir)Depandencies\Assimp\lib;$(SolutionDir)Depandencies\assimpC\lib;$(SolutionDir)Depandencies\assimpC\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;assimp-vc142-mt.lib;glfw3.lib;freeglut.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Depandencies\glm-master\glm;$(SolutionDir)/../ExternalLib/Glew and Glut/freeglut/include;$(SolutionDir)/../ExternalLib/Glew and Glut/glew-1.11.0/include;%(AdditionalIncludeDirectories);$(SolutionDir)Depandencies\imgui;$(SolutionDir)Depandencies\Assmip\include;$(SolutionDir)Depandencies\Assmip\include\assimp-vc142-mtd;$(SolutionDir)Depandencies\Assimp\include;$(SolutionDir)Depandencies\assimpC\include;$(SolutionDir)Depandencies\assimpC\include;$(SolutionDir)Depandencies\a\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Depandencies\a\lib;$(SolutionDir)/../ExternalLib/Glew and Glut/glew-1.11.0/lib;$(SolutionDir)/../ExternalLib/Glew and Glut/freeglut/lib;%(AdditionalLibraryDirectories);/NODEFAULTLIB:libcmt.lib;/NODEFAULTLIB:libcmtd.lib;/NODEFAULTLIB:msvcrtd.lib;$(SolutioDir)Depandencies\Assmip\lib;$(SolutionDir)Depandencies\Assmip\lib\;$(SolutionDir)Depandencies\Assimp\lib;$(SolutionDir)Depandencies\Assimp\lib;$(SolutionDir)Depandencies\assimpC\lib;$(SolutionDir)Depandencies\assimpC\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;assimp-vc142-mt.lib;glfw3.lib;freeglut.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Depandencies\imgui\imgui.cpp" />
+    <ClCompile Include="..\Depandencies\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\Depandencies\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\Depandencies\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\Depandencies\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\Depandencies\imgui\imgui_tables.cpp" />
+    <ClCompile Include="..\Depandencies\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="CamMovement.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="IBO.cpp" />
+    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Myimgui.cpp" />
+    <ClCompile Include="OpenGL.cpp" />
+    <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="TextureSetter.cpp" />
+    <ClCompile Include="VAO.cpp" />
+    <ClCompile Include="VBO.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Depandencies\imgui\imconfig.h" />
+    <ClInclude Include="..\Depandencies\imgui\imgui.h" />
+    <ClInclude Include="..\Depandencies\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="..\Depandencies\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="..\Depandencies\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="..\Depandencies\imgui\imgui_internal.h" />
+    <ClInclude Include="..\Depandencies\imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\Depandencies\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\Depandencies\imgui\imstb_truetype.h" />
+    <ClInclude Include="ApplicationModes.h" />
+    <ClInclude Include="CamMovement.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="IBO.h" />
+    <ClInclude Include="LightVertecies.h" />
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="Myimgui.h" />
+    <ClInclude Include="Shaders.h" />
+    <ClInclude Include="ShapesVertecies.h" />
+    <ClInclude Include="stb_image.h" />
+    <ClInclude Include="TextureSetter.h" />
+    <ClInclude Include="VAO.h" />
+    <ClInclude Include="VBO.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assimp-vc142-mt.dll">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="freeglut.dll" />
+    <None Include="Fshader.txt" />
+    <None Include="glew32.dll" />
+    <None Include="imgui.ini" />
+    <None Include="Shaders.shaderr" />
+    <None Include="Shaders.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="awesomeface.png" />
+    <Image Include="container.jpg" />
+    <Image Include="container2.png" />
+    <Image Include="container2_specular.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Vshader.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

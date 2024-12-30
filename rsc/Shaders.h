@@ -11,19 +11,26 @@ const char* VShader =
 "out vec2 Texture;\n"
 "out float near;\n"
 "out float far;\n"
+"flat out int isSelected;\n"
 "uniform mat4 Model;\n"
 "uniform mat4 View;\n"
 "uniform mat4 Projection;\n"
 "uniform float nearPPlane;\n"
 "uniform float farPPlane;\n"
+"uniform int Selected;\n"
+"vec3 outline = vec3(0);\n"
+"vec3 scale = vec3(1.004);\n"
 "void main()\n"
 "{\n"
-"    gl_Position = Projection * View * Model * vec4(pos, 1.0);\n"
+"	 if(Selected == 1) outline = vec3(normalize(Normals) * 0.01);\n"
+"	 else outline = vec3(0);\n"
+"    gl_Position = Projection * View * Model * vec4(pos + outline , 1.0);\n"
 "    FragPos = vec3(Model * vec4(pos, 1.0));\n"
 "    Nnormals = mat3(transpose(inverse(Model))) * Normals;\n"
 "    Texture = TextCoord;\n"
 "    near = nearPPlane;\n"
 "    far = farPPlane;\n"
+"    isSelected = Selected;\n"
 "}\n";
 const char* FShader =
 "#version 430 core\n"
@@ -87,7 +94,8 @@ const char* FShader =
 "in vec2 Texture;\n"
 "in float near;\n"
 "in float far;\n"
-"out vec4 Texter;\n"
+"flat in int isSelected;\n"
+"out vec4 FragColor;\n"
 "vec3 CalcDirectionL(DirectionalLight Dlight)\n"
 "{\n"
 "    vec3 lightDir = normalize(-Dlight.direction);\n"
@@ -166,13 +174,49 @@ const char* FShader =
 "void main()\n"
 "{\n"
 "    vec3 result = CalcDirectionL(Dlight);\n"
-"    Texter = vec4(Fog(gl_FragCoord.z,result),1.0);\n"
+"    if(isSelected == 1) FragColor = vec4(1,1,1,1);\n"
+"    else FragColor = vec4(result,1.0);\n"
 "}\n";
 
 
 //________________________________
 
+// select out-line shaders
+const char* SelectVShader = 
+"#version 430 core\n"
+"layout(location = 0) in vec3 pos;\n"
+//"layout(location = 1) in vec3 COLOR;\n"
+"layout(location = 1) in vec3 Normals;\n"
+"layout(location = 2) in vec2 TextCoord;\n"
+"out vec3 Nnormals;\n"
+"out vec3 FragPos;\n"
+"out vec2 Texture;\n"
+"out float near;\n"
+"out float far;\n"
+"uniform mat4 Model;\n"
+"uniform mat4 View;\n"
+"uniform mat4 Projection;\n"
+"uniform float nearPPlane;\n"
+"uniform float farPPlane;\n"
+"void main()\n"
+"{\n"
+"    gl_Position = Projection * View * Model * vec4(pos + Normals * 1, 1.0);\n"
+"    FragPos = vec3(Model * vec4(pos, 1.0));\n"
+"    Nnormals = mat3(transpose(inverse(Model))) * Normals;\n"
+"    Texture = TextCoord;\n"
+"    near = nearPPlane;\n"
+"    far = farPPlane;\n"
+"}\n";
+const char* SelectFShader =
+"#version 430 core\n"
+""
+"out vec4 Texter;\n"
+"void main()\n"
+"{\n"
+"    Texter = vec4(1,0,0,1);\n"
+"}\n";
 
+//-------------------------------
 
 // Vertex Shader
 const char* LightVShader =

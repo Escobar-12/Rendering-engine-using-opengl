@@ -43,6 +43,7 @@ glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 unsigned int Program;
 unsigned int LightProgram;
+unsigned int SelectProgram;
 
 glm::mat4x4 ViewMat(1.0f);
 
@@ -91,19 +92,20 @@ unsigned int SCompiler(GLenum type, const char* SharedSource)
 
     return id;
 }
-void InitShader()
+unsigned int InitShader(const char* VShader, const char* FShader)
 {
     // compiling the shaders 
     unsigned int VertexShader = SCompiler(GL_VERTEX_SHADER, VShader);
     unsigned int FragmentShader = SCompiler(GL_FRAGMENT_SHADER, FShader);
 
-    Program =  glCreateProgram();
+    unsigned int Program =  glCreateProgram();
     glAttachShader(Program,VertexShader);
     glAttachShader(Program,FragmentShader);
     glLinkProgram(Program);
     glBindVertexArray(0);
     glDeleteShader(VertexShader);
     glDeleteShader(FragmentShader);
+    return Program;
 }
 void InitLight()
 {
@@ -162,6 +164,29 @@ void dynamicResize(float val)
     glUniformMatrix4fv(UModel, 1, GL_FALSE, glm::value_ptr(ModleMat));
 }
 
+void OutLineSelect()
+{
+
+}
+void enableStencilForOutline() {
+    glEnable(GL_STENCIL_TEST);
+    glStencilFunc(GL_ALWAYS, 1, 0xFF); // Always pass stencil test
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE); // Replace stencil buffer value
+    glStencilMask(0xFF); // Allow writing to stencil buffer
+}
+
+void enableStencilForDrawing() {
+    glStencilFunc(GL_NOTEQUAL, 1, 0xFF); // Draw where stencil is not 1
+    glStencilMask(0x00); // Prevent writing to stencil buffer
+    glDisable(GL_DEPTH_TEST); // Disable depth to avoid z-fighting
+}
+
+void resetStencil() {
+    glStencilMask(0xFF); // Allow stencil buffer writes
+    glEnable(GL_DEPTH_TEST); // Re-enable depth test
+}
+
+
 int main() {
     glfwInit();
 
@@ -169,35 +194,23 @@ int main() {
     glewInit();
 
 
-    InitShader();
+    Program = InitShader(VShader,FShader);
+    SelectProgram = InitShader(SelectVShader,SelectFShader);
+
     InitLight();
     glDisable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_STENCIL_TEST);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE); // Replace stencil buffer value
 
-    
-    
     
     glUseProgram(Program);
 
-    
-    // Pyramid
-    TextureSetter T0("container2.png", true);
-    TextureSetter T4("container2_specular.png", true);
-
-    //Texture MeshT0 = { T0, "diffuse"};
-    //Texture MeshT1 = { T4, "specular"};
-
-    //Mesh pyramidMesh(Tvertices, sizeof(Tvertices), Tindices, sizeof(Tindices), {MeshT0,MeshT1});
-
-    TextureSetter T1("backpack/diffuse.png", true);
-    TextureSetter T3("backpack/specular.png", true);
 
     Model BackPack("backpack/backpack.obj");
     // drawing wire form
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    TextureSetter T5("container2.png", true);
-    TextureSetter T6("container2_specular.png", true);
 
 
 
@@ -280,15 +293,17 @@ int main() {
     IAMAGUI GUI(SceneCam.CamReturnContextWindow());
 
     //-------------------------------
-    
+
+
     float val = 0;
     float val2 = 0;
     float scale = 1;
     while (!glfwWindowShouldClose(SceneCam.CamReturnContextWindow())) {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
         // perform depth test but do not write to the depth buffer(read-only)
         //glDepthMask(GL_FALSE);
- 
+        //glStencilMask(0xFF);
  
         // -----------------imgui
         ImGui_ImplOpenGL3_NewFrame();
@@ -318,12 +333,14 @@ int main() {
         glUniform3fv(UViewPos, 1, glm::value_ptr(cameraPos));
         SceneCam.UpdateMatrices(UView, UProjection, cameraPos, cameraFront, cameraUp);
         displayPyramid();
-        //BackPack.Draw(Program);
-        BackPack.Draw(Program);
 
-        //pyramidMesh.Draw(LightProgram);
-        
-           
+        enableStencilForOutline();
+        BackPack.Draw(Program);
+        enableStencilForDrawing();
+        glUniform1i(glGetUniformLocation(Program, "Selected"),1);
+        BackPack.Draw(Program);        
+        glUniform1i(glGetUniformLocation(Program, "Selected"),0);
+        resetStencil();
 
         //-------------------------------
          

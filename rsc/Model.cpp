@@ -33,7 +33,6 @@ void Model::loadModel(const std::string& path) {
 	const aiScene* scene = importer.ReadFile(path,
 		aiProcess_Triangulate |
 		aiProcess_GenSmoothNormals |
-		aiProcess_FlipUVs |
 		aiProcess_CalcTangentSpace |
 		aiProcess_JoinIdenticalVertices |
 		aiProcess_ImproveCacheLocality);

@@ -1,46 +1,41 @@
 #include "TextureSetter.h"
+#include <iostream>
 
-TextureSetter::TextureSetter(const char* FileName, bool Reversed)
+TextureSetter::TextureSetter(){ }  // Initialize the TextureId to 0
+
+unsigned int TextureSetter::TextureSet(const char* FileName, bool Reversed)
 {
-    glGenTextures(1, &TextureId);  // This will generate a unique texture ID
+	unsigned int textureID;
+	glGenTextures(1, &textureID);
 
-    glBindTexture(GL_TEXTURE_2D, TextureId);
+	int width, height, nrComponents;
+	unsigned char* data = stbi_load(FileName, &width, &height, &nrComponents, 0);
+	if (data)
+	{
+		GLenum format;
+		if (nrComponents == 1)
+			format = GL_RED;
+		else if (nrComponents == 3)
+			format = GL_RGB;
+		else if (nrComponents == 4)
+			format = GL_RGBA;
 
-    stbi_set_flip_vertically_on_load(Reversed);
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
 
-    // Load image data
-    TextureData = stbi_load(FileName, &width, &height, &nchannels, 4);
-    if (TextureData) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, TextureData);
-        glGenerateMipmap(GL_TEXTURE_2D);  // Generate mipmaps (optional)
-    }
-    else {
-        std::cerr << "Failed to load texture: " << FileName << std::endl;
-    }
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    // Set texture parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    stbi_image_free(TextureData);  // Free the loaded image data
-}
-
-TextureSetter::~TextureSetter()
-{
-	glDeleteTextures(1, &TextureId);
-}
-void TextureSetter::TextureBind(unsigned int Slote)
-{
-	glActiveTexture(GL_TEXTURE0 + Slote);
-	glBindTexture(GL_TEXTURE_2D, TextureId);
-}
-void TextureSetter::TextureUnbind()
-{
+		stbi_image_free(data);
+	}
+	else
+	{
+		std::cout << "Texture failed to load at path: " << FileName << std::endl;
+		stbi_image_free(data);
+	}
 	glBindTexture(GL_TEXTURE_2D, 0);
-}
-unsigned int TextureSetter::TextureGetId()
-{
-	return TextureId;
+	return textureID;
 }

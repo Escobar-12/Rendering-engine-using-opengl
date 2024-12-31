@@ -68,7 +68,7 @@ unsigned int cubeindices[] = {
 
 // ______________________________________
 // Pyramid
-const float Tvertices[] = {
+const float Pyramidvertices[] = {
     // Base vertices (forming two triangles for the square)
     -0.5f, -0.5f, -0.5f,    0.0f, -1.0f,  0.0f,   0.0f, 0.0f, // 0: Bottom-left-front
      0.5f, -0.5f, -0.5f,    0.0f, -1.0f,  0.0f,   1.0f, 0.0f, // 1: Bottom-right-front
@@ -97,7 +97,7 @@ const float Tvertices[] = {
 };
 
 
-const unsigned int Tindices[] = {
+const unsigned int Pyramidindices[] = {
     // Base
     0, 1, 2, // First triangle of the base
     0, 2, 3, // Second triangle of the base
@@ -115,3 +115,14 @@ const unsigned int Tindices[] = {
     13, 14, 15
 };
 
+float Quadvertices[] = {
+    // Positions         // Normals          // Texture Coords
+    -0.5f, -0.5f, 0.0f,   0.0f,  0.0f, 1.0f,   0.0f, 0.0f,  // Bottom-left
+     0.5f, -0.5f, 0.0f,   0.0f,  0.0f, 1.0f,   1.0f, 0.0f,  // Bottom-right
+     0.5f,  0.5f, 0.0f,   0.0f,  0.0f, 1.0f,   1.0f, 1.0f,  // Top-right
+    -0.5f,  0.5f, 0.0f,   0.0f,  0.0f, 1.0f,   0.0f, 1.0f   // Top-left
+};
+unsigned int Quadindices[] = {
+    0, 1, 2,  // First triangle
+    0, 2, 3   // Second triangle
+};

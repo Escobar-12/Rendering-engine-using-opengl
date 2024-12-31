@@ -43,5 +43,4 @@ private:
     int specularCount = 1;
     unsigned int DrawingSize;
     unsigned int VBO, EBO;
-
 };

@@ -129,8 +129,15 @@ float offset = 0;
 void displayPyramid()
 {
     unsigned int UModel = glGetUniformLocation(Program, "Model");
-    glm::mat4x4 ModleMat(1.0);
-    glUniformMatrix4fv(UModel,1,GL_FALSE,glm::value_ptr(ModleMat));
+
+    for (int i = 0; i < 2; i++)
+    {
+        glm::mat4x4 ModleMat(1.0);
+        ModleMat = glm::translate(ModleMat, twoPos[i]);
+        ModleMat = glm::translate(ModleMat, glm::vec3(sin(i * (float)glfwGetTime()), 0, cos(i * (float)glfwGetTime())));
+        ModleMat = glm::rotate(ModleMat, i + 3 * (float)glfwGetTime(), glm::vec3(0, 1, 0));
+        glUniformMatrix4fv(UModel, 1, GL_FALSE, glm::value_ptr(ModleMat));
+    }
 }
 void displaycube()
 {
@@ -143,13 +150,10 @@ void displaycube()
 }
 void DisplayLight()
 {
-    unsigned int UModel = glGetUniformLocation(LightProgram, "Model");
+    unsigned int UModel = glGetUniformLocation(SelectProgram, "Model");
     
-    LightcubePos =  LightPos;
     glm::mat4x4 ModleMat(1.0);
-    ModleMat = glm::scale(ModleMat,glm::vec3(0.25,0.25,0.25));
-    ModleMat = glm::translate(ModleMat, LightcubePos);
-    //ModleMat = glm::translate(ModleMat, cubePos);
+    ModleMat = glm::translate(ModleMat, LightPos);
     glUniformMatrix4fv(UModel, 1, GL_FALSE, glm::value_ptr(ModleMat));
     
     glDrawArrays(GL_TRIANGLES,0, 36);
@@ -182,6 +186,7 @@ void enableStencilForDrawing() {
 }
 
 void resetStencil() {
+    glStencilFunc(GL_ALWAYS, 1, 0xFF); // Always pass stencil test
     glStencilMask(0xFF); // Allow stencil buffer writes
     glEnable(GL_DEPTH_TEST); // Re-enable depth test
 }
@@ -195,7 +200,7 @@ int main() {
 
 
     Program = InitShader(VShader,FShader);
-    SelectProgram = InitShader(SelectVShader,SelectFShader);
+    SelectProgram = InitShader(LightVShader, LightFShader);
 
     InitLight();
     glDisable(GL_CULL_FACE);
@@ -204,15 +209,28 @@ int main() {
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE); // Replace stencil buffer value
 
     
-    glUseProgram(Program);
+// Create a TextureSetter object and set the texture
+    TextureSetter text;
 
+    // Set the texture for the mesh
+    unsigned int textureId = text.TextureSet("backpack/grass.png", true);
 
+    // Now create a vector of textures with the correct texture ID
+    std::vector<Texture> textures = {
+        {textureId, "diffuse", "backpack/grass.png"}
+    };
+
+    // Create the Mesh instance
+    Mesh r(Pyramidvertices, sizeof(Pyramidvertices) / sizeof(Pyramidvertices[0]), Pyramidindices, sizeof(Pyramidindices) / sizeof(Pyramidindices[0]), textures);
+
+    // Load the model
     Model BackPack("backpack/backpack.obj");
     // drawing wire form
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-
-
+    
+    
+    glUseProgram(Program);
 
     //Camera Movments
     unsigned int UView = glGetUniformLocation(Program, "View");
@@ -267,9 +285,9 @@ int main() {
 
  
     // light cube
-    glUseProgram(LightProgram);
-    unsigned int LightUView = glGetUniformLocation(LightProgram, "View");
-    unsigned int LightUProjection = glGetUniformLocation(LightProgram, "Projection");
+    glUseProgram(SelectProgram);
+    unsigned int LightUView = glGetUniformLocation(SelectProgram, "View");
+    unsigned int LightUProjection = glGetUniformLocation(SelectProgram, "Projection");
     //glUniform1i(UText2,1);
     //glUniform1i(UText, 1);
     //Texture1.TextureBind(1);
@@ -325,15 +343,17 @@ int main() {
 
  
         // Cam
-        glUseProgram(Program);
+        glUseProgram(SelectProgram);
         SceneCam.UpdateMatrices(LightUView, LightUProjection,cameraPos,cameraFront,cameraUp);
         CameraForward = SceneCam.CameraForward();
-        
+        glUseProgram(Program);
         // Pyramid
         glUniform3fv(UViewPos, 1, glm::value_ptr(cameraPos));
         SceneCam.UpdateMatrices(UView, UProjection, cameraPos, cameraFront, cameraUp);
-        displayPyramid();
 
+
+        displayPyramid();
+        
         enableStencilForOutline();
         BackPack.Draw(Program);
         enableStencilForDrawing();
@@ -342,6 +362,11 @@ int main() {
         glUniform1i(glGetUniformLocation(Program, "Selected"),0);
         resetStencil();
 
+
+        glUseProgram(SelectProgram);
+        DisplayLight();
+        r.Draw(SelectProgram);
+       
         //-------------------------------
          
           GUI.DockingSpaceFunc(&GUI.DockingSpaceEnable);
@@ -374,7 +399,7 @@ int main() {
     //GUI.~IAMAGUI();
 
     glDeleteProgram(Program);
-
+    //delete(text);
     glfwDestroyWindow(SceneCam.CamReturnContextWindow());
     glfwTerminate();
 }

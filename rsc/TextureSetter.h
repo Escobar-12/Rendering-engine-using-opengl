@@ -4,17 +4,10 @@
 #include <string>
 #include "stb_image.h"
 
-class TextureSetter
-{
-private:
-	
-	int height, width, nchannels;
-	unsigned int TextureId;
-	unsigned char* TextureData;
+
+class TextureSetter {
 public:
-	TextureSetter(const char* FileName, bool Reversed);
-	~TextureSetter();
-	void TextureBind(unsigned int Slote = 0);
-	void TextureUnbind();
-	unsigned int TextureGetId();
+    TextureSetter();  // Default constructor
+    unsigned int TextureSet(const char* FileName, bool Reversed);  // Method to set texture
+
 };

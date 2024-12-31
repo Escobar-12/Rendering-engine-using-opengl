@@ -174,47 +174,13 @@ const char* FShader =
 "void main()\n"
 "{\n"
 "    vec3 result = CalcDirectionL(Dlight);\n"
-"    if(isSelected == 1) FragColor = vec4(1,1,1,1);\n"
+"    if(isSelected == 1) FragColor = vec4(1, 1, 0.132,1);\n"
 "    else FragColor = vec4(result,1.0);\n"
 "}\n";
 
 
 //________________________________
 
-// select out-line shaders
-const char* SelectVShader = 
-"#version 430 core\n"
-"layout(location = 0) in vec3 pos;\n"
-//"layout(location = 1) in vec3 COLOR;\n"
-"layout(location = 1) in vec3 Normals;\n"
-"layout(location = 2) in vec2 TextCoord;\n"
-"out vec3 Nnormals;\n"
-"out vec3 FragPos;\n"
-"out vec2 Texture;\n"
-"out float near;\n"
-"out float far;\n"
-"uniform mat4 Model;\n"
-"uniform mat4 View;\n"
-"uniform mat4 Projection;\n"
-"uniform float nearPPlane;\n"
-"uniform float farPPlane;\n"
-"void main()\n"
-"{\n"
-"    gl_Position = Projection * View * Model * vec4(pos + Normals * 1, 1.0);\n"
-"    FragPos = vec3(Model * vec4(pos, 1.0));\n"
-"    Nnormals = mat3(transpose(inverse(Model))) * Normals;\n"
-"    Texture = TextCoord;\n"
-"    near = nearPPlane;\n"
-"    far = farPPlane;\n"
-"}\n";
-const char* SelectFShader =
-"#version 430 core\n"
-""
-"out vec4 Texter;\n"
-"void main()\n"
-"{\n"
-"    Texter = vec4(1,0,0,1);\n"
-"}\n";
 
 //-------------------------------
 
@@ -222,24 +188,33 @@ const char* SelectFShader =
 const char* LightVShader =
 "#version 430\n"
 "layout(location = 0) in vec3 pos;\n"
+"layout(location = 1) in vec3 Normals;\n"
+"layout(location = 2) in vec2 TextCoord;\n"
+
 "uniform mat4 Model;\n"
 "uniform mat4 View;\n"
 "uniform mat4 Projection;\n"
+"out vec3 Nnormals;\n"
+"out vec3 FragPos;\n"
+"out vec2 Texture;\n"
 "void main()\n"
 "{\n"
 "   gl_Position = Projection * View * Model * vec4(pos, 1.0);\n"
+"    FragPos = vec3(Model * vec4(pos, 1.0));\n"
+"    Nnormals = mat3(transpose(inverse(Model))) * Normals;\n"
+"    Texture = TextCoord;\n"
 "}\n";
 
 // Fragment Shader
 const char* LightFShader =
 "#version 430 core \n"
 "out vec4 Texter;\n"
-
+"in vec3 FragPos;\n"
+"in vec3 Texture;\n"
+"in vec3 Nnormals;\n"
 "void main()\n"
 "{\n"
-//"   Texter = mix(texture(ourTexture,TextCoord),texture(ourTexture2,TextCoord),0.2f);\n"
-//"     Texter = texture(ourTexture ,TextCoord) * light ;\n"
-"     Texter = vec4(1,1,1,1);\n"
+"     Texter = vec4(texture(),1);\n"
 "}\n";
 
 // ------------------------

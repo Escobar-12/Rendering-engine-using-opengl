@@ -38,6 +38,9 @@ Mesh::Mesh(const float vertices[], size_t vertexCount, const unsigned int indice
 }
 
 void Mesh::Draw(unsigned int PGM) {
+    // Bind VAO and shader program
+    glBindVertexArray(VAO);
+    glUseProgram(PGM);
     // Only initialize textures once
     if (!texturesInitialized) {
         if (specularCount <= 1 || diffuseCount <= 1) {
@@ -68,9 +71,7 @@ void Mesh::Draw(unsigned int PGM) {
         texturesInitialized = true;
     }
 
-    // Bind VAO and shader program
-    glBindVertexArray(VAO);
-    glUseProgram(PGM);
+
 
     // Draw the mesh
     if (DrawingSize > 0) {

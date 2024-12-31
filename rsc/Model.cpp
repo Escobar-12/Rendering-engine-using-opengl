@@ -220,7 +220,7 @@ unsigned int Model::TextureFromFile(const char* path, const std::string& directo
 		std::cout << "Texture failed to load at path: " << path << std::endl;
 		stbi_image_free(data);
 	}
-
+	glBindTexture(GL_TEXTURE_2D, 0);
 	return textureID;
 }
 Material Model::loadMaterial(aiMaterial* mat) {

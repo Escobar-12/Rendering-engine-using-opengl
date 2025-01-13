@@ -126,3 +126,17 @@ unsigned int Quadindices[] = {
     0, 1, 2,  // First triangle
     0, 2, 3   // Second triangle
 };
+const float Tranparentshit[] = {
+    // positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
+    0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+    0.0f, -0.5f,  0.0f,  0.0f,  1.0f,
+    1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+
+    0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+    1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+    1.0f,  0.5f,  0.0f,  1.0f,  0.0f
+};
+const unsigned int indices[] = {
+    0, 1, 2,  // First triangle
+    3, 4, 5   // Second triangle
+};

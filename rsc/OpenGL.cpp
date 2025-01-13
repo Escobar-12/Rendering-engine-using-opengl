@@ -44,6 +44,7 @@ glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 unsigned int Program;
 unsigned int LightProgram;
 unsigned int SelectProgram;
+unsigned int transProgram;
 
 glm::mat4x4 ViewMat(1.0f);
 
@@ -181,6 +182,7 @@ void enableStencilForOutline() {
 
 void enableStencilForDrawing() {
     glStencilFunc(GL_NOTEQUAL, 1, 0xFF); // Draw where stencil is not 1
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
     glStencilMask(0x00); // Prevent writing to stencil buffer
     glDisable(GL_DEPTH_TEST); // Disable depth to avoid z-fighting
 }
@@ -200,35 +202,37 @@ int main() {
 
 
     Program = InitShader(VShader,FShader);
-    SelectProgram = InitShader(LightVShader, LightFShader);
+    transProgram = InitShader(TransparentVS, TransparentFS);
 
     InitLight();
-    glDisable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_STENCIL_TEST);
-    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE); // Replace stencil buffer value
-
+    glEnable(GL_BLEND);
     
 // Create a TextureSetter object and set the texture
     TextureSetter text;
 
     // Set the texture for the mesh
-    unsigned int textureId = text.TextureSet("backpack/grass.png", true);
+    //unsigned int textureId = text.TextureSet("backpack/grass.png", true);
+    unsigned int TransId = text.TextureSet("backpack/blending_transparent_window.png", true);
 
     // Now create a vector of textures with the correct texture ID
-    std::vector<Texture> textures = {
-        {textureId, "diffuse", "backpack/grass.png"}
+    //std::vector<Texture> textures = {
+    //    {textureId, "diffuse", "backpack/grass.png"}
+    //};
+    std::vector<Texture> TransTexture ={
+        {TransId, "diffuse","backpack/blending_transparent_window.png"}
     };
 
     // Create the Mesh instance
-    Mesh r(Pyramidvertices, sizeof(Pyramidvertices) / sizeof(Pyramidvertices[0]), Pyramidindices, sizeof(Pyramidindices) / sizeof(Pyramidindices[0]), textures);
+    //Mesh r(Pyramidvertices, sizeof(Pyramidvertices) / sizeof(Pyramidvertices[0]), Pyramidindices, sizeof(Pyramidindices) / sizeof(Pyramidindices[0]), textures);
 
     // Load the model
     Model BackPack("backpack/backpack.obj");
     // drawing wire form
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    
+    Mesh trans(Pyramidvertices, sizeof(Pyramidvertices)/ sizeof(Pyramidvertices[0]), Pyramidindices, sizeof(Pyramidindices)/sizeof(Pyramidindices[0]) , TransTexture);
     
     glUseProgram(Program);
 
@@ -283,7 +287,13 @@ int main() {
 
     glUniformMatrix4fv(UModel, 1, GL_FALSE, glm::value_ptr(ModleMat));
 
- 
+    glUseProgram(transProgram);
+    unsigned int TModel = glGetUniformLocation(transProgram, "Model");
+    glUniformMatrix4fv(TModel, 1, GL_FALSE, glm::value_ptr(ModleMat));
+
+    unsigned int TransUView = glGetUniformLocation(transProgram, "View");
+    unsigned int TransUProjection = glGetUniformLocation(transProgram, "Projection");
+
     // light cube
     glUseProgram(SelectProgram);
     unsigned int LightUView = glGetUniformLocation(SelectProgram, "View");
@@ -340,8 +350,6 @@ int main() {
         }
         // _----------------------------
  
-
- 
         // Cam
         glUseProgram(SelectProgram);
         SceneCam.UpdateMatrices(LightUView, LightUProjection,cameraPos,cameraFront,cameraUp);
@@ -350,26 +358,24 @@ int main() {
         // Pyramid
         glUniform3fv(UViewPos, 1, glm::value_ptr(cameraPos));
         SceneCam.UpdateMatrices(UView, UProjection, cameraPos, cameraFront, cameraUp);
+        glUseProgram(transProgram);
+        SceneCam.UpdateMatrices(TransUView, TransUProjection, cameraPos, cameraFront, cameraUp);
 
-
-        displayPyramid();
         
+        trans.Draw(transProgram);
+
         enableStencilForOutline();
         BackPack.Draw(Program);
         enableStencilForDrawing();
-        glUniform1i(glGetUniformLocation(Program, "Selected"),1);
-        BackPack.Draw(Program);        
-        glUniform1i(glGetUniformLocation(Program, "Selected"),0);
+        glUniform1i(glGetUniformLocation(Program, "Selected"), 1);
+        BackPack.Draw(Program);
+        glUniform1i(glGetUniformLocation(Program, "Selected"), 0);
         resetStencil();
 
 
-        glUseProgram(SelectProgram);
-        DisplayLight();
-        r.Draw(SelectProgram);
-       
         //-------------------------------
          
-          GUI.DockingSpaceFunc(&GUI.DockingSpaceEnable);
+        GUI.DockingSpaceFunc(&GUI.DockingSpaceEnable);
         // drawing with imgui
         ImGui::Begin("Inspector");
         ImGui::SliderFloat("value", &val, 0, 5);

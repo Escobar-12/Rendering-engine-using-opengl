@@ -21,6 +21,7 @@ Mesh::Mesh(const float vertices[], size_t vertexCount, const unsigned int indice
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BufferOffset(3 * sizeof(float)));
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BufferOffset(6 * sizeof(float)));
+
     //// vertex tangent
     //glEnableVertexAttribArray(3);
     //glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
@@ -41,48 +42,43 @@ void Mesh::Draw(unsigned int PGM) {
     // Bind VAO and shader program
     glBindVertexArray(VAO);
     glUseProgram(PGM);
-    // Only initialize textures once
-    if (!texturesInitialized) {
-        if (specularCount <= 1 || diffuseCount <= 1) {
-            for (size_t i = 0; i < Mtextures.size(); i++) {
-                glActiveTexture(GL_TEXTURE0 + i);
-                std::string num;
-                std::string type;
-                if (Mtextures[i].type == "diffuse") {
-                    num = std::to_string(diffuseCount++);
-                    type = "diffuse";
-                }
-                else if (Mtextures[i].type == "specular") {
-                    num = std::to_string(specularCount++);
-                    type = "specular";
-                }
 
-                std::string uniformName = "material." + type + num;
-                int location = glGetUniformLocation(PGM, uniformName.c_str());
-                if (location != -1) {
-                    glUniform1i(location, i);
-                    std::cout << "Binding texture unit " << i << " to uniform " << uniformName << std::endl;
-                }
-                std::cout << Mtextures[i].path.c_str() << std::endl;
-                glBindTexture(GL_TEXTURE_2D, Mtextures[i].id);
-            }
-            std::cout << "loading texture" << std::endl;
+    // Rebind textures for each draw call
+    for (size_t i = 0; i < Mtextures.size(); i++) {
+        glActiveTexture(GL_TEXTURE0 + i);
+        std::string num;
+        std::string type;
+        if (Mtextures[i].type == "diffuse") {
+            num = std::to_string(i); // Assign each texture to its respective unit
+            type = "diffuse";
         }
-        texturesInitialized = true;
+        else if (Mtextures[i].type == "specular") {
+            num = std::to_string(i); // Assign each texture to its respective unit
+            type = "specular";
+        }
+
+        std::string uniformName = "material." + type + num;
+        int location = glGetUniformLocation(PGM, uniformName.c_str());
+        if (location != -1) {
+            glUniform1i(location, i);
+        }
+        glBindTexture(GL_TEXTURE_2D, Mtextures[i].id);
     }
-
-
 
     // Draw the mesh
     if (DrawingSize > 0) {
         glDrawElements(GL_TRIANGLES, DrawingSize, GL_UNSIGNED_INT, nullptr);
-    }
-    else {
+    } else {
         std::cerr << "Warning: DrawingSize is 0." << std::endl;
+    }
+
+    // Unbind textures (optional for clarity)
+    for (size_t i = 0; i < Mtextures.size(); i++) {
+        glActiveTexture(GL_TEXTURE0 + i);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     // Unbind VAO
     glBindVertexArray(0);
-    glActiveTexture(GL_TEXTURE0);  // Reset active texture
+    glActiveTexture(GL_TEXTURE0); // Reset active texture
 }
-

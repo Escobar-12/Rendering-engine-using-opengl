@@ -214,7 +214,7 @@ const char* LightFShader =
 "in vec3 Nnormals;\n"
 "void main()\n"
 "{\n"
-"     Texter = vec4(texture(),1);\n"
+"     Texter = vec4(1,1,1,1);\n"
 "}\n";
 
 // ------------------------
@@ -230,3 +230,53 @@ const char* LightFShader =
 //    std::string String = shaderstream.str();
 //    return String.c_str();
 //}
+
+// Vertex Shader
+const char* TransparentVS =
+"#version 330 core\n"
+
+"layout(location = 0) in vec3 aPos;       // Vertex position\n"
+"layout(location = 1) in vec3 Normals;\n"
+"layout(location = 2) in vec2 aTexCoord;  // Texture coordinate\n"
+//"layout(location = 1) in vec3 COLOR;\n"
+
+"out vec2 TexCoord; // Pass texture coordinate to the fragment shader\n"
+
+"uniform mat4 Model;\n"
+"uniform mat4 View;\n"
+"uniform mat4 Projection;\n"
+
+"void main()\n"
+"{\n"
+"    gl_Position = Projection * View * Model * vec4(aPos, 1.0);\n"
+"    TexCoord = aTexCoord;\n"
+"}\n";
+
+// Fragment Shader
+const char* TransparentFS =
+"#version 330 core\n"
+
+"struct Material {\n"
+"   sampler2D ambient;\n"
+"   sampler2D diffuse1;\n"
+"   sampler2D diffuse2;\n"
+"   sampler2D diffuse3;\n"
+"   sampler2D specular1;\n"
+"   sampler2D specular2;\n"
+"   float shininess;\n"
+"};\n"
+
+"uniform Material material;\n"
+"out vec4 FragColor;\n"
+"in vec2 TexCoord;\n"
+
+"void main()\n"
+"{\n"
+"	 vec4 res = texture(material.diffuse1, TexCoord);\n"
+"	 if(res.a < 0.1)\n"
+"	 {\n"
+"	 discard;\n"
+"	 }\n"
+"    FragColor = res ;\n"
+"}\n"
+;

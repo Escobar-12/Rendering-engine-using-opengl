@@ -208,6 +208,7 @@ int main() {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_STENCIL_TEST);
     glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
 // Create a TextureSetter object and set the texture
     TextureSetter text;
@@ -362,7 +363,7 @@ int main() {
         SceneCam.UpdateMatrices(TransUView, TransUProjection, cameraPos, cameraFront, cameraUp);
 
         
-        trans.Draw(transProgram);
+        
 
         enableStencilForOutline();
         BackPack.Draw(Program);
@@ -371,7 +372,8 @@ int main() {
         BackPack.Draw(Program);
         glUniform1i(glGetUniformLocation(Program, "Selected"), 0);
         resetStencil();
-
+        
+        trans.Draw(transProgram);
 
         //-------------------------------
          

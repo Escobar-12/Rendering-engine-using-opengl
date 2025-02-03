@@ -98,21 +98,21 @@ const float Pyramidvertices[] = {
 
 
 const unsigned int Pyramidindices[] = {
-    // Base
+    // Base (should be defined in counter-clockwise order when viewed from below)
     0, 1, 2, // First triangle of the base
     0, 2, 3, // Second triangle of the base
 
     // Front face
-    4, 5, 6,
+    4, 6, 5, 
 
     // Right face
-    7, 8, 9,
+    7, 9, 8, 
 
     // Back face
-    10, 11, 12,
+    10, 12, 11, 
 
     // Left face
-    13, 14, 15
+    13, 15, 14  
 };
 
 float Quadvertices[] = {
